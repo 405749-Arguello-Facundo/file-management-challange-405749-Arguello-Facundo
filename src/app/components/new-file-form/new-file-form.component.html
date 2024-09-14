@@ -1,0 +1,49 @@
+<form [formGroup]="fileForm" (ngSubmit)="onSubmit()" class="p-4">
+  <div class="mb-3">
+    <label for="name" class="form-label">Nombre:</label>
+    <input
+      id="name"
+      type="text"
+      formControlName="name"
+      required
+      class="form-control"
+    />
+    <div
+      *ngIf="fileForm.get('name')?.invalid && fileForm.get('name')?.touched"
+      class="text-danger"
+    >
+      El nombre es requerido
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="type" class="form-label">Tipo:</label>
+    <select id="type" formControlName="type" class="form-select">
+      <option [value]="FileType.FILE">Archivo</option>
+      <option [value]="FileType.FOLDER">Carpeta</option>
+    </select>
+  </div>
+
+  <div *ngIf="fileForm.get('type')?.value === FileType.FILE" class="mb-3">
+    <label for="parentId" class="form-label">Carpeta:</label>
+    <select id="parentId" formControlName="parentId" class="form-select">
+      <option value="">Raíz</option>
+      <option *ngFor="let folder of folders" [value]="folder.id">
+        {{ folder.name }}
+      </option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="owners" class="form-label">Dueños:</label>
+    <select id="owners" formControlName="owners" multiple class="form-select">
+      <option *ngFor="let owner of owners" [value]="owner.name">
+        {{ owner.name }}
+      </option>
+    </select>
+  </div>
+
+  <button type="submit" [disabled]="fileForm.invalid" class="btn btn-primary">
+    Guardar
+  </button>
+</form>

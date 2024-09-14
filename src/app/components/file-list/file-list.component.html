@@ -1,0 +1,43 @@
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Nombre</th>
+      <th>Fecha</th>
+      <th>Dueños</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let file of files">
+      <td>
+        <input
+          type="checkbox"
+          (change)="toggleSelection(file.id)"
+          [checked]="selectedFiles.includes(file.id)"
+        />
+      </td>
+      <td [title]="file.name">
+        <i
+          [class]="file.type === FileType.FOLDER ? 'folder-icon' : 'file-icon'"
+        ></i>
+        {{ truncateName(file.name) }}
+      </td>
+      <td>{{ file.creation | date : "MMM d, yyyy" }}</td>
+      <td>
+        <span
+          *ngFor="let owner of file.owners.slice(0, 3)"
+          class="owner-circle"
+          [title]="owner.name"
+        >
+          <img [src]="owner.avatarUrl" [alt]="owner.name" />
+        </span>
+        <span *ngIf="file.owners.length > 3" class="owner-circle"
+          >+{{ file.owners.length - 3 }}</span
+        >
+      </td>
+    </tr>
+  </tbody>
+</table>
+<button (click)="deleteSelected()" [disabled]="selectedFiles.length === 0">
+  Eliminar seleccionados
+</button>
